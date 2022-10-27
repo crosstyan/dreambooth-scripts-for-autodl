@@ -11,6 +11,10 @@ First of all you have to install conda and mamba. I assume you have done that.
 ```bash
 # See https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-python.html
 mamba create -n diffusers python=3.10.6
+conda init bash
+# if you have installed powershell
+conda init powershell
+conda activate diffusers
 ```
 
 I'm using [the diffusers fork of CCRcmcpe](https://github.com/CCRcmcpe/diffusers), which added [wandb](https://wandb.ai/site) support and a few improvements.
@@ -24,6 +28,13 @@ You repos folder should look like this:
 ```txt
 ./repos/
 `-- diffusers
+```
+
+LLVM10 is required as well
+
+```bash
+# https://packages.ubuntu.com/focal/llvm-10-dev
+apt install llvm-10-dev
 ```
 
 ```bash
@@ -61,7 +72,7 @@ $env:MAKEFLAGS="-j14"
 ```
 
 I'm not sure if `MAKEFLAGS` is effective since it still takes a long time to
-compile. I mean a about an hour or less, not sure.
+compile and still only one core be used. I mean a about an hour or less, not sure.
 
 ## PowerShell
 
@@ -71,11 +82,15 @@ Why do I use PowerShell? Because I can't write correct bash scripts (Help wanted
 
 ## Usage
 
-check the source code.
+Check the source code. Just simple wrapper for the original command line interface.
+
+- `convert.ps1` convert the `ckpt` format to diffusers format
+- `train.ps1` train will train the model. Edit this file to change parameters. See [DreamBooth training example](https://github.com/ShivamShrirao/diffusers/tree/main/examples/dreambooth) for details.
+- `back.ps1` would convert the diffusers format back to `ckpt` format. the `ckpt` would be half precision and only takes *2.4G*.
 
 ## Troubleshooting
 
-Error in `File "/root/miniconda3/envs/diffusers/lib/python3.10/site-packages/bitsandbytes/cuda_setup/paths.py", line 90` that `CUDASetup.get_instance` is a function. blah blah blah.
+Error in `File "/root/miniconda3/envs/diffusers/lib/python3.10/site-packages/bitsandbytes/cuda_setup/paths.py", line 90` that `CUDASetup.get_instance` is a function. 
 
 Somehow the `get_instance` function is not called. Add `()` to fix it.
-Is the TUNA still caching the old version? This kind of bug should be fixed already.
+Is the TUNA still caching the old version? [This kind of bug should be fixed already](https://github.com/TimDettmers/bitsandbytes/blob/29e239e4d12b1c5b8ada4f03b90930735ddcb5b9/bitsandbytes/cuda_setup/paths.py#L90). ([commit](https://github.com/TimDettmers/bitsandbytes/commit/c584482f1f13e073dac714815f2d439fd66699d1))
