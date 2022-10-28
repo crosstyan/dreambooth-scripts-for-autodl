@@ -53,18 +53,28 @@ pip install .
 
 ## xformers
 
+[prebuilt wheel](https://github.com/crosstyan/dreambooth-scripts-for-autodl/releases/tag/v0.0.14) build with
+
+```txt
+Cuda compilation tools, release 11.3, V11.3.109
+RTX A5000
+Python: 3.10.6
+OS: Ubuntu 20.04.4 LTS x86_64 
+Kernel: 5.4.0-100-generic 
+```
+
 ```bash
 # https://github.com/C43H66N12O12S2/stable-diffusion-webui/releases/download/linux/xformers-0.0.14.dev0-cp310-cp310-linux_x86_64.whl
 # won't work since AutoDL provided Ubuntu version is too old
 # GLIBC_2.32 is required
-# Maybe I could share a wheel file with you
 git clone https://github.com/facebookresearch/xformers repos/xformers
 cd repos/xformers
 pip install -r requirements.txt
 # I got a machine with 14 cores
 # Is `MAKEFLAGS` really effective?
 export MAKEFLAGS="-j14"
-pip install -e .
+# use `pip wheel .` to create a whl file
+pip install .
 ```
 
 ```powershell
@@ -87,6 +97,11 @@ Check the source code. Just simple wrapper for the original command line interfa
 - `convert.ps1` convert the `ckpt` format to diffusers format
 - `train.ps1` train will train the model. Edit this file to change parameters. See [DreamBooth training example](https://github.com/ShivamShrirao/diffusers/tree/main/examples/dreambooth) for details.
 - `back.ps1` would convert the diffusers format back to `ckpt` format. the `ckpt` would be half precision and only takes *2.4G*.
+
+## TODOs
+
+- [ ] Provide a Jupyter interface directly
+- [ ] Intergrate AUTOMATIC WebUI (I'm afraid there's no enough space)
 
 ## Troubleshooting
 
