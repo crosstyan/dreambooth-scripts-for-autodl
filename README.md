@@ -1,6 +1,6 @@
 # AutoDL DreamBooth Config Cheat Sheet
 
-Code is adapted from this [the colab notebookA](https://colab.research.google.com/drive/1C1vVZ59S4kWfL7jIsczyLpmxbD4cOA-k). Thanks to the contribution from community.
+Code is adapted from this [the colab notebook](https://colab.research.google.com/drive/1C1vVZ59S4kWfL7jIsczyLpmxbD4cOA-k). Thanks to the contribution from community.
 
 ## Diffusers
 
