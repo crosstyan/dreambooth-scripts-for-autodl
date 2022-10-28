@@ -3,7 +3,12 @@
 Code is adapted from this [the colab notebook](https://colab.research.google.com/drive/1C1vVZ59S4kWfL7jIsczyLpmxbD4cOA-k). Thanks to the contribution from community.
 
 ```bash
+cd ~
+git clone https://github.com/crosstyan/dreambooth-scripts-for-autodl dreambooth
+cd dreambooth
 git submodule update --init --recursive
+# TODO write an init script to help configure the envrionment
+# for now you have to do it manually
 ```
 
 ## Diffusers
@@ -27,13 +32,6 @@ I'm using [the diffusers fork of CCRcmcpe](https://github.com/CCRcmcpe/diffusers
 git clone https://github.com/CCRcmcpe/diffusers repos/diffusers
 ```
 
-You repos folder should look like this:
-
-```txt
-./repos/
-`-- diffusers
-```
-
 LLVM10 is required as well
 
 ```bash
@@ -43,7 +41,7 @@ apt install llvm-10-dev
 
 ```bash
 # install these packages
-# switch to TUNA PiPy mirror if you get any problems
+# switch to TUNA PiPy mirror if you get any error
 # https://mirrors.tuna.tsinghua.edu.cn/help/pypi/
 pip install -U pip
 pip install wandb
