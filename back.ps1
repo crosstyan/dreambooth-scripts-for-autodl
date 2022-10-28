@@ -1,7 +1,7 @@
 param(
     # the original use_checkpoint
     [Parameter(Mandatory=$true)]
-    [string]$step
+    [string]$step,
     [Parameter()]
     [string]$outputDir="output"
  )
