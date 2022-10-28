@@ -4,7 +4,7 @@ param(
     [string]$step
  )
 
-$BACK_CONVERTER = "repos/diffusers/scripts/convert_diffusers_to_original_stable_diffusion.py"
+$BackConverter = "repos/diffusers/scripts/convert_diffusers_to_original_stable_diffusion.py"
 
 $AutoDLTmp = "/root/autodl-tmp"
 $OutPath = "$AutoDLTmp/output" # no slash at the end
@@ -14,7 +14,7 @@ $ModelPath = Join-Path $OutPath $step
 $CheckpointPath = Join-Path $ModelPath "model.ckpt"
 
 # unet_half could reduce the size of the model
-python $BACK_CONVERTER  --model_path $ModelPath `
+python $BackConverter  --model_path $ModelPath `
                         --checkpoint_path $CheckpointPath `
                         --unet_half
 

@@ -1,17 +1,4 @@
-$TRAINER = "repos/diffusers/examples/dreambooth/train_dreambooth.py"
-$CONVERTER = "repos/diffusers/scripts/convert_original_stable_diffusion_to_diffusers.py"
-$BACK_CONVERTER = "repos/diffusers/scripts/convert_diffusers_to_original_stable_diffusion.py"
-
-# Download the model
-# https://pub-2fdef7a2969f43289c42ac5ae3412fd4.r2.dev/animefull-pruned.tar
-# https://pub-2fdef7a2969f43289c42ac5ae3412fd4.r2.dev/animevae.pt
-
-# models/
-# |-- animevae.pt
-# |-- config.yaml // the config file comes with the model
-# `-- model.ckpt
-# See `convert.ps1` for more details
-
+$Trainer = "repos/diffusers/examples/dreambooth/train_dreambooth.py"
 $AutoDLTmp = "/root/autodl-tmp"
 
 # Prompt describing the subject, like subject's name.
@@ -28,25 +15,29 @@ $TrainBatchSize = 1
 # Regularization set
 # A more general prompt describing the subject, for generating regularization
 # image set.
-$ClassPrompt = "masterpiece, best quality, 1girl"
+$ClassPrompt = "1girl"
 $ClassNegativePrompt = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry" 
 # Regularization set path.
 $ClassDir = "${AutoDLTmp}/content/class-images"
 
 # Previewing
 # Prompt for saving samples.
-$SaveSamplePrompt = "masterpiece, best quality, sks 1girl, looking at viewer" 
+$SaveSamplePrompt = "sks 1girl standing looking at viewer, cowboy shot" 
 $SaveSampleNegative = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry" 
+
+
+# TODO: detect if the model exists
+# Remind the user to excecute `convert.ps1` if the model is not existing.
 
 # Model path
 $ModelName = "animefull-pruned"
 # I will dump to auto-tmp to save space of system disk
-$ModelPath = "${AutoDLTmp}/${ModelName}"
-$VaePath = "${ModelPath}/vae"
-$OutPath = "${AutoDLTmp}/output"
+$ModelPath = Join-Path $AutoDLTmp $ModelName
+$VaePath = Join-Path $ModelPath "vae"
+$OutPath = Join-Path $AutoDLTmp "output"
 mkdir -p $OutPath
 
-accelerate launch $TRAINER `
+accelerate launch $Trainer `
   --instance_data_dir $InstanceDir `
   --instance_prompt $InstancePrompt `
   --pretrained_model_name_or_path $ModelPath `
@@ -75,6 +66,6 @@ accelerate launch $TRAINER `
   --save_unet_half `
   --mixed_precision="fp16"
 
-# TODO: write a script to inference images with parameters
+# TODO: write a script to inference images with parameters like json?
 # don't care about inference. I would do it some where else.
 # see `back.ps1`

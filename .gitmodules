@@ -1,0 +1,6 @@
+[submodule "repos/diffusers"]
+	path = repos/diffusers
+	url = https://github.com/CCRcmcpe/diffusers
+[submodule "repos/xformers"]
+	path = repos/xformers
+	url = https://github.com/facebookresearch/xformers
