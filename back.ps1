@@ -2,12 +2,14 @@ param(
     # the original use_checkpoint
     [Parameter(Mandatory=$true)]
     [string]$step
+    [Parameter()]
+    [string]$outputDir="output"
  )
 
 $BackConverter = "repos/diffusers/scripts/convert_diffusers_to_original_stable_diffusion.py"
 
 $AutoDLTmp = "/root/autodl-tmp"
-$OutPath = "$AutoDLTmp/output" # no slash at the end
+$OutPath = Join-Path $AutoDLTmp $outputDir
 # input
 $ModelPath = Join-Path $OutPath $step
 # output

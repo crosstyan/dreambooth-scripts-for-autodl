@@ -37,6 +37,7 @@ $VaePath = Join-Path $ModelPath "vae"
 $OutPath = Join-Path $AutoDLTmp "output"
 mkdir -p $OutPath
 
+# use this setting if you are using A5000 like me
 accelerate launch $Trainer `
   --instance_data_dir $InstanceDir `
   --instance_prompt $InstancePrompt `
@@ -60,11 +61,15 @@ accelerate launch $Trainer `
   --infer_batch_size=2 `
   --infer_steps=28 `
   --guidance_scale=11 `
-  --gradient_accumulation_steps=1 `
   --gradient_checkpointing `
   --use_8bit_adam `
   --save_unet_half `
-  --mixed_precision="fp16"
+  --mixed_precision="fp16" `
+  --train_text_encoder
+
+# `gradient accumulation` will save VRAM but slow it down
+# `train_text_encoder` would train text encoder
+# increase the batch size if you still got spare VRAM
 
 # TODO: write a script to inference images with parameters like json?
 # don't care about inference. I would do it some where else.
