@@ -1,1 +1,3 @@
 concept.json
+deepbooru/models/*
+!deepbooru/models/dd_models_should_be_here.txt

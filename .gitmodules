@@ -4,3 +4,6 @@
 [submodule "repos/xformers"]
 	path = repos/xformers
 	url = https://github.com/facebookresearch/xformers
+[submodule "repos/DeepDanbooru"]
+	path = repos/DeepDanbooru
+	url = https://github.com/KichangKim/DeepDanbooru

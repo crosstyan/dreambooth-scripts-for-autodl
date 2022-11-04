@@ -128,11 +128,23 @@ pip install -r requirements.txt
 pip install .
 ```
 
-`I'm not sure if `MAKEFLAGS` is effective since it still takes a long time to
-compile and still only one core be used. I mean a about an hour or less, not sure.`
+~~I'm not sure if `MAKEFLAGS` is effective since it still takes a long time to~~
+~~compile and still only one core be used. I mean a about an hour or less, not sure.~~
 
 Using ninja could speed the building process up. ([source](https://github.com/facebookresearch/xformers/issues/481))
 
+## DeepDanbooru
+
+OPTIONAL! Useful if you want to add tags to your images.
+
+[KichangKim/DeepDanbooru](https://github.com/KichangKim/DeepDanbooru)
+
+```bash
+pip install -r repos/DeepDanbooru/requirements.txt
+pip install basicsr
+pip install -U numpy # I have to do this
+pip install repos/DeepDanbooru
+```
 
 ## Usage
 

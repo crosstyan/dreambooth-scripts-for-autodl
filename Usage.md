@@ -22,6 +22,8 @@ wandb login
 # input your wandb API token
 ```
 
+You can view sample images from WandB now.
+
 ### Multiple Class/Concept
 
 See [`gen_concept.ps1`](gen_concept.ps1).
@@ -53,23 +55,19 @@ You have to choose a unique token first, you can test if the token you found is 
 
 ### Multiple Optimizer
 
-Only in RcINS fork.
-
 `--optimizer` argument. You could choose from `"adamw", "adamw_8bit", "adamw_ds", "sgdm", "sgdm_8bit"`.
 
 ### Aspect Ratio Bucket
 
-Only support in alternative script. See also [NovelAI/novelai-aspect-ratio-bucketing](https://github.com/NovelAI/novelai-aspect-ratio-bucketing/).
+~~Only support in alternative script.~~ See also [NovelAI/novelai-aspect-ratio-bucketing](https://github.com/NovelAI/novelai-aspect-ratio-bucketing/).
 
 `--use_aspect_ratio_bucket` 
 
 > BucketManager impls NovelAI Aspect Ratio Bucketing, which may greatly improve the quality of outputs according to [Novelai's blog](https://blog.novelai.net/novelai-improvements-on-stable-diffusion-e10d38db82ac)
 
-Maybe use with `prior preservation loss`? I'm not sure if it's necessary.
-
 ### Read Prompt TXT
 
-Only support in alternative script.
+~~Only support in alternative script.~~ [commit](https://github.com/CCRcmcpe/diffusers/commit/91dc2ad80a35839ab1aa017224d5953712b3ae02)
 
 `--read_prompt_txt`
 
@@ -77,7 +75,7 @@ Append extra prompt from txt. Just like how you train embeddings/hypernetworks i
 
 ### Train Text Encoder
 
-`train_text_encoder` is necessary for multi-class training. It would train a text encoder.
+`train_text_encoder` is necessary for multi-class training I think. Not sure.
 
 ### With Prior Preservation
 
