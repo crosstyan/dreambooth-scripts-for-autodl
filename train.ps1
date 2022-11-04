@@ -1,6 +1,8 @@
 param(
   [switch] $alt=$false,
-  [switch] $wandb=$true
+  [switch] $wandb=$true,
+  [Parameter()]
+  [string]$BatchSize = "4"
 )
 
 $Trainer = "repos/diffusers/examples/dreambooth/train_dreambooth.py"
@@ -22,12 +24,13 @@ if ($alt) {
   }
 }
 
+$WandBParam = if ($wandb) { "--wandb" } else { "" }
+
 $AutoDLTmp = "/root/autodl-tmp"
 # Training parameters.
 # @param {type:"slider", min:64, max:2048, step:28}
-$Resolution = 512 
+$Resolution = 768 
 # @param {type:"slider", min:1, max:10, step:1}
-$TrainBatchSize = 1 
 $ConceptsPath = Join-Path (Invoke-Expression "Get-Location") "concept.json"
 
 # Previewing
@@ -56,7 +59,7 @@ accelerate launch $Trainer `
   --output_dir $OutPath `
   --seed=1337 `
   --resolution=$Resolution `
-  --train_batch_size=$TrainBatchSize `
+  --train_batch_size=$BatchSize `
   --learning_rate=5e-6 `
   --lr_scheduler="cosine_with_restarts" `
   --lr_warmup_steps=100 `
@@ -77,7 +80,8 @@ accelerate launch $Trainer `
   --optimizer adamw_8bit `
   --save_unet_half `
   --mixed_precision="fp16" `
-  --train_text_encoder
+  --train_text_encoder `
+  $WandBParam
 
 # `gradient accumulation` will save VRAM but slow it down
 # `train_text_encoder` would train text encoder
