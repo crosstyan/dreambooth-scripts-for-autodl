@@ -28,6 +28,10 @@ See [`gen_concept.ps1`](gen_concept.ps1).
 
 You can put multiple subject/class/concept in a json file like this
 
+For example: You want to train two concept. Illustration from mika and some random sketch.
+
+You have to choose a unique token first, you can test if the token you found is unique by [NovelAI Tokenizer](https://novelai.net/tokenizer). I choose `sks` and `sqn` here, which have token id `[48136]` and `[41209]`.
+
 ```json
 [
   {
@@ -38,7 +42,7 @@ You can put multiple subject/class/concept in a json file like this
     "class_data_dir": "/Users/crosstyan/Code/dreambooth/multiple_concept/mika/class"
   },
   {
-    "instance_prompt": "sks sketch",
+    "instance_prompt": "sqn sketch",
     "instance_data_dir": "/Users/crosstyan/Code/dreambooth/multiple_concept/sketch/inst",
     "class_prompt": "sketch",
     "class_negative_prompt": "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry",
