@@ -2,7 +2,7 @@
 
 Code is adapted from this [the colab notebook](https://colab.research.google.com/drive/1C1vVZ59S4kWfL7jIsczyLpmxbD4cOA-k). Thanks to the contribution from community.
 
-Add alternative `train_dreambooth.py` from [this colab notebook](https://colab.research.google.com/drive/17yM4mlPVOFdJE_81oWBz5mXH9cxvhmz8#scrollTo=aLWXPZqjsZVV). use `alt_script.ps1` to download it.
+Add alternative `train_dreambooth.py` from [this colab notebook](https://colab.research.google.com/drive/17yM4mlPVOFdJE_81oWBz5mXH9cxvhmz8#scrollTo=aLWXPZqjsZVV). use `get_alt_script.ps1` to download it.
 
 Choose PyTorch 1.11.0 Python 3.8 (Ubuntu 20.04) as base image.
 
