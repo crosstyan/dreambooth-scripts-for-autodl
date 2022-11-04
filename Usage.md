@@ -75,7 +75,7 @@ Append extra prompt from txt. Just like how you train embeddings/hypernetworks i
 
 `train_text_encoder` is necessary for multi-class training. It would train a text encoder.
 
-## With Prior Preservation
+### With Prior Preservation
 
 Don't use class image for training (I guess)
 
