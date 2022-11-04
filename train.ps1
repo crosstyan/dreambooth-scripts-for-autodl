@@ -1,30 +1,39 @@
+param(
+  [switch] $alt=$false,
+  [switch] $wandb=$true
+)
+
 $Trainer = "repos/diffusers/examples/dreambooth/train_dreambooth.py"
+
+# https://stackoverflow.com/questions/31879814/check-if-a-file-exists-or-not-in-windows-powershell
+if ($alt) {
+  Write-Host "Try to use alternative script"
+  $Trainer = "repos/diffusers/examples/dreambooth/train_dreambooth_alt.py"
+  $exist = Test-Path $Trainer -PathType Leaf
+  if (!$exist) {
+    Write-Host "Alternative trainer not found. Run 'get_alt_script.ps1' to get it."
+    exit 1
+  }
+} else {
+  $exist = Test-Path $Trainer -PathType Leaf
+  if (!$exist) {
+    Write-Host "Trainer not found. Have you run 'git submodule update --init --recursive'?"
+    exit 1
+  }
+}
+
 $AutoDLTmp = "/root/autodl-tmp"
-
-# Prompt describing the subject, like subject's name.
-$InstancePrompt = "a sketch of sks"
-# Training set path (images of the subject).
-$InstanceDir = "${AutoDLTmp}/content/instance"
-
 # Training parameters.
 # @param {type:"slider", min:64, max:2048, step:28}
 $Resolution = 512 
 # @param {type:"slider", min:1, max:10, step:1}
 $TrainBatchSize = 1 
-
-# Regularization set
-# A more general prompt describing the subject, for generating regularization
-# image set.
-$ClassPrompt = "1girl"
-$ClassNegativePrompt = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry" 
-# Regularization set path.
-$ClassDir = "${AutoDLTmp}/content/class-images"
+$ConceptsPath = Join-Path (Invoke-Expression "Get-Location") "concept.json"
 
 # Previewing
 # Prompt for saving samples.
 $SaveSamplePrompt = "sks 1girl standing looking at viewer, cowboy shot" 
 $SaveSampleNegative = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry" 
-
 
 # TODO: detect if the model exists
 # Remind the user to excecute `convert.ps1` if the model is not existing.
@@ -37,6 +46,7 @@ $VaePath = Join-Path $ModelPath "vae"
 $OutPath = Join-Path $AutoDLTmp "output"
 mkdir -p $OutPath
 
+# https://stackoverflow.com/questions/2608144/how-to-split-long-commands-over-multiple-lines-in-powershell
 # use this setting if you are using A5000 like me
 accelerate launch $Trainer `
   --instance_data_dir $InstanceDir `
@@ -61,8 +71,10 @@ accelerate launch $Trainer `
   --infer_batch_size=2 `
   --infer_steps=28 `
   --guidance_scale=11 `
+  --concepts_list $ConceptsPath `
   --gradient_checkpointing `
-  --use_8bit_adam `
+  <# --use_8bit_adam if you are running alt script#> `
+  --optimizer adamw_8bit `
   --save_unet_half `
   --mixed_precision="fp16" `
   --train_text_encoder

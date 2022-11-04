@@ -2,6 +2,10 @@
 
 Code is adapted from this [the colab notebook](https://colab.research.google.com/drive/1C1vVZ59S4kWfL7jIsczyLpmxbD4cOA-k). Thanks to the contribution from community.
 
+Add alternative `train_dreambooth.py` from [this colab notebook](https://colab.research.google.com/drive/17yM4mlPVOFdJE_81oWBz5mXH9cxvhmz8#scrollTo=aLWXPZqjsZVV). use `alt_script.ps1` to download it.
+
+Choose PyTorch 1.11.0 Python 3.8 (Ubuntu 20.04) as base image.
+
 ```bash
 cd ~
 git clone https://github.com/crosstyan/dreambooth-scripts-for-autodl dreambooth
@@ -13,6 +17,8 @@ git submodule update --init --recursive
 
 ## Diffusers
 
+### Conda Environment Configuration
+
 using conda/mamba with Python 3.10.6. 
 
 First of all you have to install conda and mamba. I assume you have done that.
@@ -20,11 +26,38 @@ First of all you have to install conda and mamba. I assume you have done that.
 ```bash
 # See https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-python.html
 mamba create -n diffusers python=3.10.6
-conda init bash
 # if you have installed powershell
+```
+
+If you're NOT using my scripts you can choose to configure bash
+
+```bash
+conda init bash
+conda activate diffusers
+# or use your favourite text editor
+# or sed, whatever
+# see also https://stackoverflow.com/questions/17701989/how-do-i-append-text-to-a-file
+vim ~/.bashrc
+# echo "conda activate diffusers" >> ~/.bashrc
+# add `conda activate diffusers` to the end of file
+```
+
+#### PowerShell
+
+If you're using my script you have to install PowerShell.
+See [Installing PowerShell on Ubuntu](https://learn.microsoft.com/en-us/powershell/scripting/install/install-ubuntu?view=powershell-7.2).
+
+```bash
+# after installing PowerShell
 conda init powershell
 conda activate diffusers
+vim ~/.config/powershell/profile.ps1
+# add `conda activate diffusers` to the end of file
 ```
+
+> Why do I use PowerShell? Because I can't write correct bash scripts (Help wanted!) and too lazy to use python.
+
+### Clone the Repo
 
 I'm using [the diffusers fork of CCRcmcpe](https://github.com/CCRcmcpe/diffusers), which added [wandb](https://wandb.ai/site) support and a few improvements.
 
@@ -55,6 +88,12 @@ pip install .
 
 ## xformers
 
+[xformers](https://github.com/facebookresearch/xformers) is totally OPTIONAL. You can skip this part if you feel like doing it. It just speed up the training process, which is trivial if you have a beefy machine like A5000. If you mess up anything about xformers, just uninstall it.
+
+```
+pip uninstall xformers
+```
+
 [prebuilt wheel](https://github.com/crosstyan/dreambooth-scripts-for-autodl/releases/tag/v0.0.14) build with
 
 ```txt
@@ -66,39 +105,38 @@ Kernel: 5.4.0-100-generic
 ```
 
 ```bash
+wget https://github.com/crosstyan/dreambooth-scripts-for-autodl/releases/download/v0.0.14/xformers-0.0.14.dev0-cp310-cp310-linux_x86_64.whl
+pip install xformers-0.0.14.dev0-cp310-cp310-linux_x86_64.whl
+```
+
+### Compile from source
+
+Here's how you build it from source.
+
+```bash
 # https://github.com/C43H66N12O12S2/stable-diffusion-webui/releases/download/linux/xformers-0.0.14.dev0-cp310-cp310-linux_x86_64.whl
 # won't work since AutoDL provided Ubuntu version is too old
 # GLIBC_2.32 is required
 git clone https://github.com/facebookresearch/xformers repos/xformers
 cd repos/xformers
+# install ninja to speedup building.
+pip install ninja
+# or maybe
+# apt install ninja-build build-essential
 pip install -r requirements.txt
-# I got a machine with 14 cores
-# Is `MAKEFLAGS` really effective?
-export MAKEFLAGS="-j14"
 # use `pip wheel .` to create a whl file
 pip install .
 ```
 
-```powershell
-$env:MAKEFLAGS="-j14"
-```
+`I'm not sure if `MAKEFLAGS` is effective since it still takes a long time to
+compile and still only one core be used. I mean a about an hour or less, not sure.`
 
-I'm not sure if `MAKEFLAGS` is effective since it still takes a long time to
-compile and still only one core be used. I mean a about an hour or less, not sure.
+Using ninja could speed the building process up. ([source](https://github.com/facebookresearch/xformers/issues/481))
 
-## PowerShell
-
-See [Installing PowerShell on Ubuntu](https://learn.microsoft.com/en-us/powershell/scripting/install/install-ubuntu?view=powershell-7.2).
-
-Why do I use PowerShell? Because I can't write correct bash scripts (Help wanted!) and too lazy to use python.
 
 ## Usage
 
-Check the source code. Just simple wrapper for the original command line interface.
-
-- `convert.ps1` convert the `ckpt` format to diffusers format
-- `train.ps1` train will train the model. Edit this file to change parameters. See [DreamBooth training example](https://github.com/ShivamShrirao/diffusers/tree/main/examples/dreambooth) for details.
-- `back.ps1` would convert the diffusers format back to `ckpt` format. the `ckpt` would be half precision and only takes *2.4G*.
+See [Usage](Usage.md)
 
 ## TODOs
 
