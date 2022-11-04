@@ -11,13 +11,13 @@ if ($alt) {
   $Trainer = "repos/diffusers/examples/dreambooth/train_dreambooth_alt.py"
   $exist = Test-Path $Trainer -PathType Leaf
   if (!$exist) {
-    Write-Host "Alternative trainer not found. Run 'get_alt_script.ps1' to get it."
+    Write-Host -ForegroundColor red "Alternative trainer not found. Run 'get_alt_script.ps1' to get it."
     exit 1
   }
 } else {
   $exist = Test-Path $Trainer -PathType Leaf
   if (!$exist) {
-    Write-Host "Trainer not found. Have you run 'git submodule update --init --recursive'?"
+    Write-Host -ForegroundColor red "Trainer not found. Have you run 'git submodule update --init --recursive'?"
     exit 1
   }
 }

@@ -1,5 +1,11 @@
 $Converter = "repos/diffusers/scripts/convert_original_stable_diffusion_to_diffusers.py"
 
+$exist = Test-Path $Converter -PathType Leaf
+if (!$exist) {
+    Write-Host -ForegroundColor red "Trainer not found. Have you run 'git submodule update --init --recursive'?"
+    exit 1
+}
+
 # Download the model
 # https://pub-2fdef7a2969f43289c42ac5ae3412fd4.r2.dev/animefull-pruned.tar
 # https://pub-2fdef7a2969f43289c42ac5ae3412fd4.r2.dev/animevae.pt
