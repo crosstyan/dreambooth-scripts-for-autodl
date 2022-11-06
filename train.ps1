@@ -27,10 +27,11 @@ if ($alt) {
 $WandBParam = if ($wandb) { "--wandb" } else { "" }
 
 $AutoDLTmp = "/root/autodl-tmp"
+
 # Training parameters.
 # @param {type:"slider", min:64, max:2048, step:28}
 $Resolution = 768 
-# @param {type:"slider", min:1, max:10, step:1}
+
 $ConceptsPath = Join-Path (Invoke-Expression "Get-Location") "concept.json"
 
 # Previewing

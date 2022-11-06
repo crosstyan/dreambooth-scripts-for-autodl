@@ -105,6 +105,12 @@ def get_deepbooru_tags_from_model(
     return ", ".join(result_tags_out)
 
 
+# Do some post processing with generated txt
+# like add artist name
+def post_process_prompt(prompt: str, append: str) -> str:
+    prompt = prompt + ", " + append
+    return prompt
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--path", type=str, default=".")
@@ -114,6 +120,8 @@ if __name__ == "__main__":
     parser.add_argument("--use_escape", type=bool, default=True)
     parser.add_argument("--model_path", type=str, default="")
     parser.add_argument("--include_ranks", type=bool, default=False)
+    parser.add_argument("--post_process", type=bool, default=True)
+    parser.add_argument("--append", type=str, default="sks", help="append a string to the end of the prompt. only effective when post_process is True")
 
     args = parser.parse_args()
 
@@ -127,13 +135,25 @@ if __name__ == "__main__":
     else:
         model_path = args.model_path
 
-    types = ('*.jpg', '*.png', '*.jpeg', '*.gif', '*.webp', '*.bmp') # the tuple of file types
-    files_grabbed = []
-    for files in types:
-        files_grabbed.extend(glob.glob(files))
+    types = ('jpg', 'png', 'jpeg', 'gif', 'webp', 'bmp') # the tuple of file types
+    p = args.path
+    is_abs = os.path.isabs(args.path)
+    if not is_abs:
+        p = os.path.abspath(args.path)
+    if not os.path.exists(p):
+        print("{} not exists".format(p))
+        exit(1)
+    print("abs path is {}".format(p))
+    # copilot did this
+    files_grabbed = glob.glob(os.path.join(p, "**"), recursive=True)
+    print("found {} files".format(len(files_grabbed)))
+    files_with_ext = [ f for f in files_grabbed if f.endswith(types) ]
+    print("found {} files with extensions".format(len(files_with_ext)))
         
     model, tags = get_deepbooru_tags_model(model_path)
-    for image_path in tqdm(files_grabbed, desc="Processing"):
+    for image_path in tqdm(files_with_ext, desc="Processing"):
+        if os.path.isdir(image_path):
+            continue
         image = Image.open(image_path).convert("RGB")
         prompt = get_deepbooru_tags_from_model(
             model,
@@ -145,9 +165,12 @@ if __name__ == "__main__":
             use_escape=args.use_escape,
             include_ranks=args.include_ranks,
         )
+        if (args.post_process):
+            prompt = post_process_prompt(prompt, args.append)
         image_name = os.path.splitext(os.path.basename(image_path))[0]
         txt_filename = os.path.join(args.path, f"{image_name}.txt")
         print(f"writing {txt_filename}: {prompt}")
+        # https://stackoverflow.com/questions/4914277/how-to-empty-a-file-using-python
+        # overwrite the file default
         with open(txt_filename, 'w') as f:
             f.write(prompt)
-        
