@@ -24,12 +24,9 @@ if ($alt) {
   }
 }
 
-$WandBParam = if ($wandb) { "--wandb" } else { "" }
-
 $AutoDLTmp = "/root/autodl-tmp"
 
-# Training parameters.
-# @param {type:"slider", min:64, max:2048, step:28}
+# maybe use 512?
 $Resolution = 768 
 
 $ConceptsPath = Join-Path (Invoke-Expression "Get-Location") "concept.json"
@@ -50,11 +47,16 @@ $VaePath = Join-Path $ModelPath "vae"
 $OutPath = Join-Path $AutoDLTmp "output"
 mkdir -p $OutPath
 
+$WandBParam = if ($wandb) { "--wandb" } else { "" }
+
 # https://stackoverflow.com/questions/2608144/how-to-split-long-commands-over-multiple-lines-in-powershell
 # use this setting if you are using A5000 like me
+# The arguements list is moved to somewhere else in this commit
+# https://github.com/CCRcmcpe/diffusers/commit/3511e7bac92cf3e7c595405ecd60c3679b84a726
+
+# See https://github.com/CCRcmcpe/diffusers/blob/main/examples/dreambooth/modules/args.py
+# for full parameter list
 accelerate launch $Trainer `
-  --instance_data_dir $InstanceDir `
-  --instance_prompt $InstancePrompt `
   --pretrained_model_name_or_path $ModelPath `
   --pretrained_vae_name_or_path $VaePath `
   --output_dir $OutPath `
@@ -62,13 +64,19 @@ accelerate launch $Trainer `
   --resolution=$Resolution `
   --train_batch_size=$BatchSize `
   --learning_rate=5e-6 `
+  <# "linear", "cosine", "cosine_with_restarts", "polynomial"#> `
   --lr_scheduler="cosine_with_restarts" `
   --lr_warmup_steps=100 `
-  --max_train_steps=2000 `
-  --save_interval=500 `
+  <# deprecated. use epoches instead #> `
+  <# --max_train_steps=2000 #> `
+  --num_train_epochs=50 `
+  <#deprecated. use epoches instead #> `
+  <# --save_interval=500 #> `
+  --save_interval_epochs=10 `
+  <# save sample but not models #> `
+  --sample_interval=100 `
+  <# delete this if you want to fine tune directly #> `
   --with_prior_preservation --prior_loss_weight=1.0 `
-  --class_data_dir $ClassDir `
-  --class_prompt $ClassPrompt --class_negative_prompt $ClassNegativePrompt `
   --num_class_images=25 `
   --save_sample_prompt $SaveSamplePrompt --save_sample_negative_prompt $SaveSampleNegative `
   --n_save_sample=4 `
@@ -77,11 +85,12 @@ accelerate launch $Trainer `
   --guidance_scale=11 `
   --concepts_list $ConceptsPath `
   --gradient_checkpointing `
-  <# --use_8bit_adam if you are running alt script#> `
+  <# `--use_8bit_adam` if you are running alt script#> `
   --optimizer adamw_8bit `
   --save_unet_half `
   --mixed_precision="fp16" `
-  --train_text_encoder `
+  <# Don't train text encoder unless you know what are you doing #> `
+  <# --train_text_encoder #> `
   $WandBParam
 
 # `gradient accumulation` will save VRAM but slow it down

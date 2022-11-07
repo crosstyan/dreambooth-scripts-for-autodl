@@ -11,23 +11,27 @@ $OutJson = Join-Path (Invoke-Expression "Get-Location") "concept.json"
 
 $negative = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry"
 
+# https://stackoverflow.com/questions/25880122/how-do-i-use-join-path-to-combine-more-than-two-strings-into-a-file-path
 $mika = @{
   instance_prompt = "sks woman";
   class_prompt = "woman";
   class_negative_prompt = $negative;
-  instance_data_dir = Join-Path $MultBaseDir "mika" "inst";
-  class_data_dir = Join-Path $MultBaseDir "mika" "class";
+  instance_data_dir = [IO.Path]::Combine($MultBaseDir,"mika","inst");
+  class_data_dir = [IO.Path]::Combine($MultBaseDir,"mika","class");
 }
 
 $sketch = @{
   instance_prompt = "sks sketch";
   class_prompt = "sketch";
   class_negative_prompt = $negative;
-  instance_data_dir = Join-Path $MultBaseDir "sketch" "inst";
-  class_data_dir = Join-Path $MultBaseDir "sketch" "class";
+  instance_data_dir = [IO.Path]::Combine($MultBaseDir,"sketch","inst");
+  class_data_dir = [IO.Path]::Combine($MultBaseDir,"sketch","class");
 }
 
-$concepts = $mika, $sketch
+# $concepts = $mika, $sketch
+# $concepts = @($mika, $sketch)
+# wrap it with @() to make it an array
+$concepts = @($mika)
 
 $res = ConvertTo-Json $concepts
 Out-File -FilePath $OutJson -InputObject $res

@@ -6,7 +6,7 @@ Check the source code. Just simple wrapper for the original command line interfa
 - `train.ps1` train will train the model. Edit this file to change parameters. See [DreamBooth training example](https://github.com/ShivamShrirao/diffusers/tree/main/examples/dreambooth) for details.
 - `back.ps1` would convert the diffusers format back to `ckpt` format. the `ckpt` would be half precision and only takes *2.4G*.
 
-and check the [SOURCE CODE](https://github.com/CCRcmcpe/diffusers/blob/main/examples/dreambooth/train_dreambooth.py) of `train_dreambooth.py` for details.
+and check the [SOURCE CODE](https://github.com/CCRcmcpe/diffusers/blob/main/examples/dreambooth/modules/args.py) of `train_dreambooth.py` for details.
 
 I would copy and paste the description from the original colab for now.
 
