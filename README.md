@@ -133,17 +133,12 @@ pip install .
 
 Using ninja could speed the building process up. ([source](https://github.com/facebookresearch/xformers/issues/481))
 
-## DeepDanbooru
+## Tagging
 
-OPTIONAL! Useful if you want to add tags to your images.
-
-[KichangKim/DeepDanbooru](https://github.com/KichangKim/DeepDanbooru)
+See also [blip_helper](https://github.com/crosstyan/blip_helper). It will apply the result of [BLIP](https://github.com/salesforce/BLIP) and [DeepDanbooru](https://github.com/KichangKim/DeepDanbooru) at the same time.
 
 ```bash
-pip install -r repos/DeepDanbooru/requirements.txt
-pip install basicsr
-pip install -U numpy # I have to do this
-pip install repos/DeepDanbooru
+python blip_helper/run.py --path /path/to/your/image
 ```
 
 ## Usage
@@ -153,11 +148,4 @@ See [Usage](Usage.md)
 ## TODOs
 
 - [ ] Provide a Jupyter interface directly
-- [ ] Intergrate AUTOMATIC WebUI (I'm afraid there's no enough space)
-
-## Troubleshooting
-
-Error in `File "/root/miniconda3/envs/diffusers/lib/python3.10/site-packages/bitsandbytes/cuda_setup/paths.py", line 90` that `CUDASetup.get_instance` is a function. 
-
-Somehow the `get_instance` function is not called. Add `()` to fix it.
-Is the TUNA still caching the old version? [This kind of bug should be fixed already](https://github.com/TimDettmers/bitsandbytes/blob/29e239e4d12b1c5b8ada4f03b90930735ddcb5b9/bitsandbytes/cuda_setup/paths.py#L90). ([commit](https://github.com/TimDettmers/bitsandbytes/commit/c584482f1f13e073dac714815f2d439fd66699d1))
+- [ ] Intergrate with AUTOMATIC WebUI (I'm afraid there's no enough space)
