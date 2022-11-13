@@ -1,6 +1,8 @@
 param(
     # the original use_checkpoint
     [Parameter(Mandatory = $true)]
+    [string]$id,
+    [Parameter(Mandatory = $true)]
     [string]$step,
     [Parameter()]
     [string]$outputDir = "output"
@@ -17,7 +19,9 @@ if (!$exist) {
 $AutoDLTmp = "/root/autodl-tmp"
 $OutPath = Join-Path $AutoDLTmp $outputDir
 # input
-$ModelPath = Join-Path $OutPath $step
+# change this directly if you did not use the default ouput dir
+# remove params
+$ModelPath = Join-Path $OutPath $id $step
 # output
 $CheckpointPath = Join-Path $ModelPath "model.ckpt"
 
